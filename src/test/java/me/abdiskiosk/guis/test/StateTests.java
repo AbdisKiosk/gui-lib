@@ -28,9 +28,9 @@ public class StateTests {
     public void whenStateIsConcurrentlyUpdates_subscriberStateIsConsistent() throws InterruptedException {
         List<Integer> seen = Collections.synchronizedList(new ArrayList<>());
         State<Integer> state = new State<>(0);
-        final int SUBSCRIBERS = 10;
 
-        for(int i = 0; i < 10; i++) {
+        final int SUBSCRIBERS = 10;
+        for(int i = 0; i < SUBSCRIBERS; i++) {
             state.subscribe(seen::add);
         }
 
