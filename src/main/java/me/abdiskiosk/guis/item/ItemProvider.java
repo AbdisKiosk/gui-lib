@@ -1,6 +1,5 @@
 package me.abdiskiosk.guis.item;
 
-import me.abdiskiosk.guis.component.Component;
 import me.abdiskiosk.guis.placeholder.PlaceholderApplier;
 import me.abdiskiosk.guis.state.NamedState;
 import org.bukkit.inventory.ItemStack;
@@ -8,8 +7,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Supplier;
 
-public abstract class ItemProvider implements Component<ItemStack> {
+public abstract class ItemProvider implements Supplier<ItemStack> {
 
     protected final PlaceholderApplier placeholderApplier;
     protected final List<NamedState<?>> placeholders;
@@ -22,7 +22,7 @@ public abstract class ItemProvider implements Component<ItemStack> {
     protected abstract @NotNull ItemStack generateBase();
 
     @Override
-    public @NotNull ItemStack create() {
+    public @NotNull ItemStack get() {
         ItemStack item = generateBase();
         updateMeta(item);
         return item;

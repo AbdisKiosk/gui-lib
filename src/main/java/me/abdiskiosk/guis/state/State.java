@@ -27,7 +27,6 @@ public class State<T> {
 
     public synchronized void update() {
         subscribers.forEach(subscriber -> subscriber.accept(value));
-
     }
 
     public synchronized void subscribe(@NotNull Consumer<T> subscriber) {

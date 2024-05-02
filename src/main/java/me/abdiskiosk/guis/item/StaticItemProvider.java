@@ -11,7 +11,6 @@ public class StaticItemProvider extends ItemProvider {
 
     private final @NotNull ItemStack item;
 
-
     public StaticItemProvider(@NotNull PlaceholderApplier placeholderApplier, @NotNull List<NamedState<?>> placeholders,
                               @NotNull ItemStack item) {
         super(placeholderApplier, placeholders);
