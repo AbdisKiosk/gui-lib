@@ -58,6 +58,7 @@ public class GUI implements GUIEventHandler {
                 GUIManager.getInstance().getPlaceholderApplier(), placeholders);
     }
 
+    //TODO: don't render items before player opens gui
     public void open(@NotNull Player player) {
         view.open(player);
     }
