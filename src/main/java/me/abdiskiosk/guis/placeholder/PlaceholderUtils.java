@@ -1,0 +1,65 @@
+package me.abdiskiosk.guis.placeholder;
+
+import me.abdiskiosk.guis.item.gui.GUIItem;
+import me.abdiskiosk.guis.state.NamedState;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
+
+public class PlaceholderUtils {
+
+    public static @NotNull GUIItem withPlaceholders(@NotNull GUIItem item, @NotNull PlaceholderApplier applier,
+                                  @NotNull Collection<@NotNull NamedState<?>> states) {
+        return new GUIItem(withPlaceholders(item.getItem(), applier, states), item.getSlots());
+    }
+
+    public static @NotNull ItemStack withPlaceholders(@NotNull ItemStack item, @NotNull PlaceholderApplier applier,
+                                  @NotNull Collection<@NotNull NamedState<?>> states) {
+        ItemStack clone = item.clone();
+        ItemMeta meta = clone.getItemMeta();
+        if(meta == null) {
+            return clone;
+        }
+
+        if(meta.hasDisplayName()) {
+            meta.setDisplayName(applier.replace(item.getItemMeta().getDisplayName(), states));
+        }
+
+        if(meta.hasLore()) {
+            meta.setLore(applier.replace(item.getItemMeta().getLore(), states));
+        }
+
+        clone.setItemMeta(meta);
+        return clone;
+    }
+
+    public static Set<String> getUsedPlaceholders(@NotNull ItemStack item) {
+        if(!item.hasItemMeta()) {
+            return Collections.emptySet();
+        }
+
+        Set<String> strings = new HashSet<>();
+        if(item.getItemMeta().hasDisplayName()) {
+            strings.addAll(getUsedPlaceholders(item.getItemMeta().getDisplayName()));
+        }
+        if(item.getItemMeta().hasLore()) {
+            for(String lore : item.getItemMeta().getLore()) {
+                strings.addAll(getUsedPlaceholders(lore));
+            }
+        }
+
+        Set<String> placeholders = new HashSet<>();
+        for(String string : strings) {
+            placeholders.addAll(getUsedPlaceholders(string));
+        }
+
+        return placeholders;
+    }
+
+    public static Set<String> getUsedPlaceholders(@NotNull String text) {
+        return Set.of(text.split("\\{([^}]*)}"));
+    }
+
+}

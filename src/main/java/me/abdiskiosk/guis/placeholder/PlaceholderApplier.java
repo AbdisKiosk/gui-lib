@@ -9,11 +9,12 @@ import java.util.List;
 
 public interface PlaceholderApplier {
 
-    @NotNull String replace(@NotNull String text, @NotNull Collection<NamedState<?>> states);
+    @NotNull String replace(@NotNull String text, @NotNull Collection<@NotNull NamedState<?>> states);
 
-    default @NotNull List<@NotNull String> replace(@NotNull List<@NotNull String> text, @NotNull Collection<NamedState<?>> states) {
+    default @NotNull List<@NotNull String> replace(@NotNull List<@NotNull String> text,
+                                                   @NotNull Collection<@NotNull NamedState<?>> states) {
         List<String> replaced = new ArrayList<>(text);
-        for (int i = 0; i < text.size(); i++) {
+        for(int i = 0; i < text.size(); i++) {
             replaced.set(i, replace(text.get(i), states));
         }
         return replaced;
