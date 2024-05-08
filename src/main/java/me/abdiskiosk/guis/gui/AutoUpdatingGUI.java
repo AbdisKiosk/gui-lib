@@ -25,6 +25,7 @@ public class AutoUpdatingGUI extends GUI {
 
     @Override
     public void registerPlaceholder(@NotNull NamedState<?> state) {
+        super.registerPlaceholder(state);
         state.subscribe(value -> onUpdate(state));
     }
 
@@ -50,7 +51,7 @@ public class AutoUpdatingGUI extends GUI {
     protected void onUpdate(@NotNull NamedState<?> state) {
         Set<GUIItem> toUpdate = getToUpdate(state);
         for(GUIItem item : toUpdate) {
-            super.set(item);
+            super.update(item);
         }
 
         if(shouldUpdateName(state)) {
@@ -60,7 +61,7 @@ public class AutoUpdatingGUI extends GUI {
 
     protected @NotNull Set<@NotNull GUIItem> getToUpdate(@NotNull NamedState<?> state) {
         return itemToUsedPlaceholders.entrySet().stream()
-                .filter(entry -> entry.getValue().contains(state.getName()))
+                .filter(entry -> entry.getValue().contains("{" + state.getName() + "}"))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }

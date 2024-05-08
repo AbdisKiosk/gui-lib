@@ -1,13 +1,15 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group = 'me.abdiskiosk'
+version = '0.0.17'
 
 repositories {
     mavenCentral()
-    maven { url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url "https://hub.spigotmc.org/nexus/content/groups/public/" }
+    maven { url "https://repo.codemc.io/repository/maven-releases/" }
 }
 
 dependencies {
@@ -23,4 +25,21 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+java.targetCompatibility = 8
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = group
+            artifactId = 'new-guis'
+            version = version
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
 }

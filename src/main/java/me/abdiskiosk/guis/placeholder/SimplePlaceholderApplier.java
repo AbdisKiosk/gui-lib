@@ -10,7 +10,7 @@ public class SimplePlaceholderApplier implements PlaceholderApplier {
     @Override
     public @NotNull String replace(@NotNull String text, @NotNull Collection<NamedState<?>> states) {
         for(NamedState<?> state : states) {
-            text = text.replaceAll("{" + state.getName() + "}", state.get().toString());
+            text = text.replaceAll("\\{" + state.getName() + "}", state.get().toString());
         }
         return text;
     }

@@ -9,14 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class ListenerItemStack extends ItemStack implements GUIClickEventHandler {
+public class ListenerItemStack implements GUIClickEventHandler {
 
     private final ArrayList<@NotNull Consumer<@NotNull InventoryClickEvent>> clickListeners = new ArrayList<>(1);
     private final ArrayList<@NotNull Consumer<@NotNull InventoryDragEvent>> dragListeners = new ArrayList<>(1);
-
-    public ListenerItemStack(@NotNull ItemStack item) {
-        super(item);
-    }
 
     public synchronized void onDrag(@NotNull Consumer<@NotNull InventoryDragEvent> listener) {
         dragListeners.add(listener);

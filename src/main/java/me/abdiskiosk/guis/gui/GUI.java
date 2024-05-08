@@ -11,6 +11,7 @@ import me.abdiskiosk.guis.gui.view.bukkit.BukkitGUIView;
 import me.abdiskiosk.guis.item.gui.GUIItem;
 import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
 import me.abdiskiosk.guis.state.NamedState;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -45,9 +46,20 @@ public class GUI implements GUIEventHandler {
     }
 
     public synchronized ListenerItemStack set(@NotNull GUIItem item) {
-        GUIItem withPlaceholders = PlaceholderUtils.withPlaceholders(item,
+        return view.setItem(parse(item));
+    }
+
+    protected void update(@NotNull GUIItem item) {
+        view.updateItem(parse(item));
+    }
+
+    protected @NotNull GUIItem parse(@NotNull GUIItem item) {
+        return PlaceholderUtils.withPlaceholders(item,
                 GUIManager.getInstance().getPlaceholderApplier(), placeholders);
-        return view.setItem(withPlaceholders);
+    }
+
+    public void open(@NotNull Player player) {
+        view.open(player);
     }
 
     protected void remove(@NotNull GUIItem item) {

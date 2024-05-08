@@ -10,6 +10,7 @@ import java.util.Collection;
 public interface GUIView extends GUIClickEventHandler {
     void open(@NotNull Player player);
     @NotNull ListenerItemStack setItem(@NotNull GUIItem item);
+    @NotNull void updateItem(@NotNull GUIItem item);
     void removeItems(@NotNull Collection<@NotNull Integer> slots);
     void setName(@NotNull String name);
 

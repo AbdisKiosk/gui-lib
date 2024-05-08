@@ -14,11 +14,12 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import java.util.*;
 
 public class BukkitGUIView implements GUIView, InventoryHolder {
 
     private @NotNull Inventory inventory;
+    private final @NotNull Map<@NotNull Integer, @NotNull ListenerItemStack> slotToListener = new HashMap<>();
 
     public BukkitGUIView(@NotNull String name, int sizeSlots) {
         this.inventory = Bukkit.createInventory(this, sizeSlots, name);
@@ -31,13 +32,21 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
 
     @Override
     public @NotNull ListenerItemStack setItem(@NotNull GUIItem item) {
-        ListenerItemStack listen = new ListenerItemStack(item.getItem());
+        ListenerItemStack listen = new ListenerItemStack();
 
         for(int slot : item.getSlots()) {
-            inventory.setItem(slot, listen);
+            inventory.setItem(slot, item.getItem());
+            slotToListener.put(slot, listen);
         }
 
         return listen;
+    }
+
+    @Override
+    public void updateItem(@NotNull GUIItem item) {
+        for(int slot : item.getSlots()) {
+            inventory.setItem(slot, item.getItem());
+        }
     }
 
     @Override
@@ -53,12 +62,9 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
         Inventory newInventory = Bukkit.createInventory(this, oldInventory.getSize(), name);
 
         newInventory.setContents(oldInventory.getContents());
-        for(HumanEntity entity : oldInventory.getViewers()) {
-            if(entity == null) {
-                continue;
-            }
-
-            entity.openInventory(newInventory);
+        Set<HumanEntity> oldViewers = new HashSet<>(oldInventory.getViewers()); //Avoid concurrent modification
+        for(HumanEntity viewer : oldViewers) {
+            viewer.openInventory(newInventory);
         }
 
         this.inventory = newInventory;
@@ -66,17 +72,19 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
 
     @Override
     public void handleDrag(@NotNull InventoryDragEvent event) {
-        ItemStack item = event.getOldCursor();
-        if(item instanceof GUIClickEventHandler) {
-            ((GUIClickEventHandler) item).handleDrag(event);
+        for(int slot : event.getInventorySlots()) {
+            ListenerItemStack listener = slotToListener.get(slot);
+            if(listener != null) {
+                listener.handleDrag(event);
+            }
         }
     }
 
     @Override
     public void handleClick(@NotNull InventoryClickEvent event) {
-        ItemStack item = event.getCurrentItem();
-        if(item instanceof GUIClickEventHandler) {
-            ((GUIClickEventHandler) item).handleClick(event);
+        ListenerItemStack listener = slotToListener.get(event.getSlot());
+        if(listener != null) {
+            listener.handleClick(event);
         }
     }
 

@@ -31,6 +31,7 @@ public class State<T> {
 
     public synchronized void subscribe(@NotNull Consumer<T> subscriber) {
         subscribers.add(subscriber);
+        subscriber.accept(value);
     }
 
     public synchronized void unsubscribe(@NotNull Consumer<T> subscriber) {

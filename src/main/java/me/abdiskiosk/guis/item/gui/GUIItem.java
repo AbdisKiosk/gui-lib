@@ -15,7 +15,7 @@ public class GUIItem {
     @Getter
     private final Collection<Integer> slots;
 
-    public GUIItem(@NotNull ItemStack item, @NotNull Collection<Integer> slots) {
+    public GUIItem(@NotNull Collection<Integer> slots, @NotNull ItemStack item) {
         this.item = item;
         this.slots = slots;
     }

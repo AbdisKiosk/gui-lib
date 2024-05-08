@@ -7,12 +7,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlaceholderUtils {
 
+    private static final Pattern PATTERN = Pattern.compile("\\{([^}]*)}");
+
     public static @NotNull GUIItem withPlaceholders(@NotNull GUIItem item, @NotNull PlaceholderApplier applier,
                                   @NotNull Collection<@NotNull NamedState<?>> states) {
-        return new GUIItem(withPlaceholders(item.getItem(), applier, states), item.getSlots());
+        return new GUIItem(item.getSlots(), withPlaceholders(item.getItem(), applier, states));
     }
 
     public static @NotNull ItemStack withPlaceholders(@NotNull ItemStack item, @NotNull PlaceholderApplier applier,
@@ -59,7 +63,12 @@ public class PlaceholderUtils {
     }
 
     public static Set<String> getUsedPlaceholders(@NotNull String text) {
-        return Set.of(text.split("\\{([^}]*)}"));
+        Set<String> placeholders = new HashSet<>();
+        Matcher matcher = PATTERN.matcher(text);
+        while (matcher.find()) {
+            placeholders.add(matcher.group());
+        }
+        return placeholders;
     }
 
 }
