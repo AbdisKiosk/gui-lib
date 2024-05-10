@@ -1,9 +1,8 @@
 package me.abdiskiosk.guis.gui.view.bukkit;
 
-import me.abdiskiosk.guis.event.GUIClickEventHandler;
 import me.abdiskiosk.guis.gui.view.GUIView;
 import me.abdiskiosk.guis.gui.view.ListenerItemStack;
-import me.abdiskiosk.guis.item.gui.GUIItem;
+import me.abdiskiosk.guis.item.GUIItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -11,7 +10,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

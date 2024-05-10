@@ -1,4 +1,4 @@
-package me.abdiskiosk.guis.item.gui;
+package me.abdiskiosk.guis.item;
 
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;

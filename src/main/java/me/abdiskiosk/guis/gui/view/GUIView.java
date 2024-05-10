@@ -1,7 +1,7 @@
 package me.abdiskiosk.guis.gui.view;
 
 import me.abdiskiosk.guis.event.GUIClickEventHandler;
-import me.abdiskiosk.guis.item.gui.GUIItem;
+import me.abdiskiosk.guis.item.GUIItem;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

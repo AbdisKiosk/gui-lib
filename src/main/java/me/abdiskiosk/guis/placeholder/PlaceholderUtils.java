@@ -1,6 +1,6 @@
 package me.abdiskiosk.guis.placeholder;
 
-import me.abdiskiosk.guis.item.gui.GUIItem;
+import me.abdiskiosk.guis.item.GUIItem;
 import me.abdiskiosk.guis.state.NamedState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

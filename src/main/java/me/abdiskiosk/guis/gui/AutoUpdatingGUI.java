@@ -1,7 +1,7 @@
 package me.abdiskiosk.guis.gui;
 
 import me.abdiskiosk.guis.gui.view.ListenerItemStack;
-import me.abdiskiosk.guis.item.gui.GUIItem;
+import me.abdiskiosk.guis.item.GUIItem;
 import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
 import me.abdiskiosk.guis.state.NamedState;
 import org.jetbrains.annotations.NotNull;
