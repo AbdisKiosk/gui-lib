@@ -4,12 +4,12 @@ import lombok.Getter;
 import me.abdiskiosk.guis.gui.AutoUpdatingGUI;
 import org.jetbrains.annotations.NotNull;
 
-public class ConfigGUI extends AutoUpdatingGUI {
+public class ConfigGUI<T extends GUIConfig> extends AutoUpdatingGUI {
 
     @Getter
-    protected final GUIConfig config;
+    protected final T config;
 
-    public ConfigGUI(@NotNull GUIConfig config) {
+    public ConfigGUI(@NotNull T config) {
         super(config.getName(), config.getSlots());
         this.config = config;
 

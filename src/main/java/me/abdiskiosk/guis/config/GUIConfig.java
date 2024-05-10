@@ -1,6 +1,5 @@
 package me.abdiskiosk.guis.config;
 
-import me.abdiskiosk.guis.gui.GUI;
 import me.abdiskiosk.guis.item.GUIItem;
 import org.jetbrains.annotations.NotNull;
 
