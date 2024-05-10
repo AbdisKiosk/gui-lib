@@ -2,40 +2,24 @@ package me.abdiskiosk.guis.state;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class State<T> {
+public interface State<T> {
 
-    private T value;
+    T get();
 
-    private final Collection<@NotNull Consumer<T>> subscribers = new ArrayList<>();
+    void set(T value);
 
-    public State(T value) {
-        this.value = value;
-    }
+    void update();
 
-    public synchronized T get() {
-        return value;
-    }
+    void subscribe(@NotNull Consumer<T> subscriber);
+    void subscribe(@NotNull BiConsumer<T, T> subscriber);
 
-    public synchronized void set(T value) {
-        this.value = value;
-        update();
-    }
+    void unsubscribe(@NotNull Consumer<T> subscriber);
 
-    public synchronized void update() {
-        subscribers.forEach(subscriber -> subscriber.accept(value));
-    }
-
-    public synchronized void subscribe(@NotNull Consumer<T> subscriber) {
-        subscribers.add(subscriber);
-        subscriber.accept(value);
-    }
-
-    public synchronized void unsubscribe(@NotNull Consumer<T> subscriber) {
-        subscribers.remove(subscriber);
+    static <T> @NotNull State<T> of(T value) {
+        return new DefaultState<>(value);
     }
 
 }

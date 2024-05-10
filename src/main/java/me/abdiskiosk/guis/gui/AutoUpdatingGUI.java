@@ -6,10 +6,7 @@ import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
 import me.abdiskiosk.guis.state.NamedState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AutoUpdatingGUI extends GUI {
@@ -24,9 +21,12 @@ public class AutoUpdatingGUI extends GUI {
     }
 
     @Override
-    public void registerPlaceholder(@NotNull NamedState<?> state) {
-        super.registerPlaceholder(state);
-        state.subscribe(value -> onUpdate(state));
+    public void registerPlaceholders(@NotNull Collection<@NotNull NamedState<?>> states) {
+        super.registerPlaceholders(states);
+
+        for(NamedState<?> state : states) {
+            state.subscribe(value -> onUpdate(state));
+        }
     }
 
     @Override

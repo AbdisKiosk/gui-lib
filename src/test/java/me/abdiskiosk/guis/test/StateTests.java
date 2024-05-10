@@ -1,6 +1,6 @@
 package me.abdiskiosk.guis.test;
 
-import me.abdiskiosk.guis.state.State;
+import me.abdiskiosk.guis.state.DefaultState;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -16,7 +16,7 @@ public class StateTests {
     public void whenStateIsUpdated_thenSubscribersAreNotified() {
         AtomicBoolean called = new AtomicBoolean(false);
 
-        State<Integer> state = new State<>(0);
+        DefaultState<Integer> state = new DefaultState<>(0);
         state.subscribe(update -> called.set(true));
 
         state.set(1);
@@ -27,11 +27,11 @@ public class StateTests {
     @Test
     public void whenStateIsConcurrentlyUpdates_subscriberStateIsConsistent() throws InterruptedException {
         List<Integer> seen = Collections.synchronizedList(new ArrayList<>());
-        State<Integer> state = new State<>(0);
+        DefaultState<Integer> state = new DefaultState<>(0);
 
         final int SUBSCRIBERS = 10;
         for(int i = 0; i < SUBSCRIBERS; i++) {
-            state.subscribe(seen::add);
+            state.subscribe(newValue -> seen.add(newValue));
         }
 
         final int UPDATES = 12;

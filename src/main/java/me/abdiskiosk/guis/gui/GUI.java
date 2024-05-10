@@ -20,6 +20,8 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -58,7 +60,6 @@ public class GUI implements GUIEventHandler {
                 GUIManager.getInstance().getPlaceholderApplier(), placeholders);
     }
 
-    //TODO: don't render items before player opens gui
     public void open(@NotNull Player player) {
         view.open(player);
     }
@@ -68,7 +69,11 @@ public class GUI implements GUIEventHandler {
     }
 
     public synchronized void registerPlaceholder(@NotNull NamedState<?> placeholder) {
-        placeholders.add(placeholder);
+        registerPlaceholders(Collections.singleton(placeholder));
+    }
+
+    public synchronized void registerPlaceholders(@NotNull Collection<@NotNull NamedState<?>> placeholders) {
+        this.placeholders.addAll(placeholders);
     }
 
     protected @NotNull GUIView createView(@NotNull String name, int sizeSlots) {
