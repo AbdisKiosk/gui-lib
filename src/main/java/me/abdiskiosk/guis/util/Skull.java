@@ -36,9 +36,8 @@ public class Skull {
         Object property = Class.forName("com.mojang.authlib.properties.Property")
                 .getConstructor(String.class, String.class).newInstance("textures", texture);
 
-        Method put = profile.getClass().getMethod("put", Object.class, Object.class);
-
-        put.invoke(profile, "textures", property);
+        Object properties = profile.getClass().getMethod("getProperties").invoke(profile);
+        properties.getClass().getMethod("put", Object.class, Object.class).invoke(properties, "textures", property);
 
         return profile;
     }

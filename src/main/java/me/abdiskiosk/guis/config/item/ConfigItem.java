@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.function.Function;
 
-public class ConfigItem implements Function<@NotNull ConfigGUI, @NotNull GUIItem> {
+public class ConfigItem implements Function<@NotNull ConfigGUI<?>, @NotNull GUIItem> {
 
     @Getter
     @NotNull

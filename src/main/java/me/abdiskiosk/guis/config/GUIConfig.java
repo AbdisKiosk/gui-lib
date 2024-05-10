@@ -11,6 +11,6 @@ public interface GUIConfig {
     int getSlots();
     @NotNull String getName();
 
-    @NotNull Collection<@NotNull Function<@NotNull ConfigGUI, @NotNull GUIItem>> getDecoration();
+    @NotNull Collection<@NotNull Function<@NotNull ConfigGUI<?>, @NotNull GUIItem>> getDecoration();
 
 }

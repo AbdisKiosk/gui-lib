@@ -1,6 +1,8 @@
 package me.abdiskiosk.guis.item;
 
 import me.abdiskiosk.guis.util.Skull;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -17,8 +19,16 @@ public class ItemBuilder {
         return new ItemBuilder(Skull.fromTexture(texture));
     }
 
+    public static @NotNull ItemBuilder pane(@NotNull PaneColor color) {
+        return new ItemBuilder(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) color.getData()));
+    }
+
     public ItemBuilder(@NotNull ItemStack item) {
         this.item = item.clone();
+    }
+
+    public ItemBuilder(@NotNull Material material) {
+        this(new ItemStack(material));
     }
 
     public @NotNull ItemBuilder setName(@NotNull String name) {

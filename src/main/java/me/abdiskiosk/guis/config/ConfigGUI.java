@@ -2,6 +2,9 @@ package me.abdiskiosk.guis.config;
 
 import lombok.Getter;
 import me.abdiskiosk.guis.gui.AutoUpdatingGUI;
+import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
+import me.abdiskiosk.guis.reflection.StateFinder;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfigGUI<T extends GUIConfig> extends AutoUpdatingGUI {
@@ -16,6 +19,13 @@ public class ConfigGUI<T extends GUIConfig> extends AutoUpdatingGUI {
         config.getDecoration().forEach(decoration -> {
             set(decoration.apply(this));
         });
+    }
+
+    @Override
+    public void open(@NotNull Player player) {
+        //TODO: dont rerender when player opens
+        registerPlaceholders(StateFinder.findStates(this));
+        super.open(player);
     }
 
 }

@@ -2,7 +2,7 @@ package me.abdiskiosk.guis;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.abdiskiosk.guis.listener.GUIListener;
+import me.abdiskiosk.guis.listener.BukkitListener;
 import me.abdiskiosk.guis.placeholder.PlaceholderApplier;
 import me.abdiskiosk.guis.placeholder.SimplePlaceholderApplier;
 import org.bukkit.plugin.Plugin;
@@ -28,6 +28,6 @@ public class GUIManager {
     }
 
     public static void registerListeners(@NotNull Plugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new GUIListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new BukkitListener(plugin), plugin);
     }
 }
