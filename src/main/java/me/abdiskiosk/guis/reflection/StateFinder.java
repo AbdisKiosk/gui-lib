@@ -1,7 +1,9 @@
 package me.abdiskiosk.guis.reflection;
 
+import lombok.SneakyThrows;
 import me.abdiskiosk.guis.state.NamedState;
 import me.abdiskiosk.guis.state.State;
+import me.abdiskiosk.guis.state.UnmodifiableState;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -14,16 +16,22 @@ public class StateFinder {
         Set<NamedState<?>> states = new HashSet<>();
         for(Field field : getFields(object.getClass())) {
             try {
-                Object value = field.get(object);
-                if(value instanceof State<?>) {
-                    states.add(new NamedState<>((State<?>) value, findName(field)));
-                }
+                states.add(new NamedState<>(stateOf(field, object), findName(field)));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
 
         return states;
+    }
+
+    protected static @NotNull State<?> stateOf(@NotNull Field field, @NotNull Object object) throws IllegalAccessException {
+        field.setAccessible(true);
+        Object value = field.get(object);
+        if(value instanceof State<?>) {
+            return (State<?>) value;
+        }
+        return new UnmodifiableState<>(value);
     }
 
     protected static @NotNull Set<@NotNull Field> getFields(@NotNull Class<?> clazz) {
