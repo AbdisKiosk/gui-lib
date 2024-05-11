@@ -43,7 +43,7 @@ public class AutoUpdatingGUI extends GUI {
     }
 
     @Override
-    protected void remove(@NotNull GUIItem item) {
+    public void remove(@NotNull GUIItem item) {
         itemToUsedPlaceholders.remove(item);
         super.remove(item);
     }
