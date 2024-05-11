@@ -50,7 +50,7 @@ public class GUI implements GUIEventHandler {
         return view.setItem(parse(item));
     }
 
-    protected void update(@NotNull GUIItem item) {
+    public void update(@NotNull GUIItem item) {
         view.updateItem(parse(item));
     }
 
@@ -63,7 +63,7 @@ public class GUI implements GUIEventHandler {
         view.open(player);
     }
 
-    protected void remove(@NotNull GUIItem item) {
+    public void remove(@NotNull GUIItem item) {
         view.removeItems(item.getSlots());
     }
 
