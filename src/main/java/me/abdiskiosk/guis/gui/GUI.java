@@ -71,6 +71,10 @@ public class GUI implements GUIEventHandler {
         view.removeItems(item.getSlots());
     }
 
+    public void remove(@NotNull Collection<Integer> slots) {
+        view.removeItems(slots);
+    }
+
     public synchronized void registerPlaceholder(@NotNull NamedState<?> placeholder) {
         registerPlaceholders(Collections.singleton(placeholder));
     }
