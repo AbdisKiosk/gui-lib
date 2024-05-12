@@ -42,8 +42,12 @@ public class GUI implements GUIEventHandler {
 
     protected final @NotNull Set<NamedState<?>> placeholders = new HashSet<>();
 
+    @Getter
+    protected final int sizeSlots;
+
     public GUI(@NotNull String name, int sizeSlots) {
         this.view = createView(parseName(name), sizeSlots);
+        this.sizeSlots = sizeSlots;
     }
 
     public synchronized ListenerItemStack set(@NotNull GUIItem item) {
