@@ -84,7 +84,7 @@ public class GUI implements GUIEventHandler {
     }
 
     protected @NotNull GUIView createView(@NotNull String name, int sizeSlots) {
-        return new BukkitGUIView(parseName(name), sizeSlots);
+        return new BukkitGUIView(parseName(name), sizeSlots, this);
     }
 
     protected void setName(@NotNull String name) {

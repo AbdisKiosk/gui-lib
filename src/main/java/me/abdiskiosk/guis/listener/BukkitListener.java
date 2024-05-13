@@ -53,6 +53,10 @@ public class BukkitListener implements Listener {
             view.handleDrag((InventoryDragEvent) event);
         } else if(event instanceof InventoryClickEvent) {
             view.handleClick((InventoryClickEvent) event);
+        } else if(event instanceof InventoryOpenEvent) {
+            view.handleOpen((InventoryOpenEvent) event);
+        } else if(event instanceof InventoryCloseEvent) {
+            view.handleClose((InventoryCloseEvent) event);
         }
     }
 

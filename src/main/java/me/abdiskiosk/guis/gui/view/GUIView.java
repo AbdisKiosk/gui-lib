@@ -1,13 +1,14 @@
 package me.abdiskiosk.guis.gui.view;
 
 import me.abdiskiosk.guis.event.GUIClickEventHandler;
+import me.abdiskiosk.guis.event.GUIEventHandler;
 import me.abdiskiosk.guis.item.GUIItem;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public interface GUIView extends GUIClickEventHandler {
+public interface GUIView extends GUIEventHandler {
     void open(@NotNull Player player);
     @NotNull ListenerItemStack setItem(@NotNull GUIItem item);
     @NotNull void updateItem(@NotNull GUIItem item);
