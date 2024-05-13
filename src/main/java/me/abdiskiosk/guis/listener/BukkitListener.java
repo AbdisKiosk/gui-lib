@@ -6,9 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -33,12 +31,21 @@ public class BukkitListener implements Listener {
         handleEvent(event);
     }
 
+    @EventHandler
+    public void onOpen(@NotNull InventoryOpenEvent event) {
+        handleEvent(event);
+    }
+
+    public void onClose(@NotNull InventoryCloseEvent event) {
+        handleEvent(event);
+    }
+
     protected void handleEvent(@NotNull InventoryEvent event) {
         Inventory inventory = event.getView().getTopInventory();
         if(!(inventory.getHolder() instanceof GUIView)) {
             return;
         }
-        if(event instanceof Cancellable) {
+        if((event instanceof InventoryClickEvent || event instanceof InventoryDragEvent)) {
             ((Cancellable) event).setCancelled(true);
         }
         GUIView view = (GUIView) inventory.getHolder();
