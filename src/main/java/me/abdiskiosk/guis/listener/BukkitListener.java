@@ -33,6 +33,15 @@ public class BukkitListener implements Listener {
         handleEvent(event);
     }
 
+    @EventHandler
+    public void onOpen(@NotNull InventoryEvent event) {
+        handleEvent(event);
+    }
+
+    public void onClose(@NotNull InventoryEvent event) {
+        handleEvent(event);
+    }
+
     protected void handleEvent(@NotNull InventoryEvent event) {
         Inventory inventory = event.getView().getTopInventory();
         if(!(inventory.getHolder() instanceof GUIView)) {
