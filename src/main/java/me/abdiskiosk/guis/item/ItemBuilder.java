@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ItemBuilder {
@@ -37,6 +39,10 @@ public class ItemBuilder {
 
     public @NotNull ItemBuilder setLore(@NotNull String... lore) {
         return modifyMeta(meta -> meta.setLore(java.util.Arrays.asList(lore)));
+    }
+
+    public @NotNull ItemBuilder setLore(@NotNull List<@NotNull String> lore) {
+        return modifyMeta(meta -> meta.setLore(lore));
     }
 
     public @NotNull ItemBuilder setShiny() {
