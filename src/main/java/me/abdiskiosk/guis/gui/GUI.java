@@ -97,13 +97,11 @@ public class GUI implements GUIEventHandler {
 
     @Override
     public void handleDrag(@NotNull InventoryDragEvent event) {
-        view.handleDrag(event);
         handleIfPresent(dragAction, event);
     }
 
     @Override
     public void handleClick(@NotNull InventoryClickEvent event) {
-        view.handleClick(event);
         handleIfPresent(clickAction, event);
     }
 
