@@ -2,6 +2,7 @@ package me.abdiskiosk.guis.util;
 
 import lombok.SneakyThrows;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,16 @@ public class Skull {
         properties.getClass().getMethod("put", Object.class, Object.class).invoke(properties, "textures", property);
 
         return profile;
+    }
+
+    public static @NotNull ItemStack from(@NotNull OfflinePlayer player) {
+        ItemStack skull = skull();
+        SkullMeta sm = (SkullMeta) skull.getItemMeta();
+        sm.setOwner(player.getName());
+        skull.setItemMeta(sm);
+
+        return skull;
+
     }
 
     public static @NotNull ItemStack skull() {
