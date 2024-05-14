@@ -36,6 +36,7 @@ public class BukkitListener implements Listener {
         handleEvent(event);
     }
 
+    @EventHandler
     public void onClose(@NotNull InventoryCloseEvent event) {
         handleEvent(event);
     }
