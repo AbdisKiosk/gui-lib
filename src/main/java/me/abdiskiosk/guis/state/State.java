@@ -1,5 +1,8 @@
 package me.abdiskiosk.guis.state;
 
+import me.abdiskiosk.guis.state.objects.IntState;
+import me.abdiskiosk.guis.state.objects.WeakPlayerState;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;
@@ -20,6 +23,14 @@ public interface State<T> {
 
     static <T> @NotNull State<T> of(T value) {
         return new DefaultState<>(value);
+    }
+
+    static WeakPlayerState of(@NotNull Player player) {
+        return new WeakPlayerState(player);
+    }
+
+    static IntState of(int value) {
+        return new IntState(value);
     }
 
 }
