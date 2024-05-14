@@ -10,7 +10,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class ItemBuilder {
@@ -43,6 +45,14 @@ public class ItemBuilder {
 
     public @NotNull ItemBuilder setLore(@NotNull List<@NotNull String> lore) {
         return modifyMeta(meta -> meta.setLore(lore));
+    }
+
+    public @NotNull ItemBuilder removeEnchantments() {
+        return modifyMeta(meta -> {
+            Set<Enchantment> enchantments = new HashSet<>(meta.getEnchants().keySet());
+
+            enchantments.forEach(meta::removeEnchant);
+        });
     }
 
     public @NotNull ItemBuilder setShiny(boolean shiny) {
