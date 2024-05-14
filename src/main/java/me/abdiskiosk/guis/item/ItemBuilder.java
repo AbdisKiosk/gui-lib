@@ -45,6 +45,13 @@ public class ItemBuilder {
         return modifyMeta(meta -> meta.setLore(lore));
     }
 
+    public @NotNull ItemBuilder setShiny(boolean shiny) {
+        if(shiny) {
+            return setShiny();
+        }
+        return this;
+    }
+
     public @NotNull ItemBuilder setShiny() {
         addFlag(ItemFlag.HIDE_ATTRIBUTES);
         return modifyMeta(meta -> meta.addEnchant(Enchantment.LUCK, 1, true));
