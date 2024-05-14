@@ -53,7 +53,7 @@ public class ItemBuilder {
     }
 
     public @NotNull ItemBuilder setShiny() {
-        addFlag(ItemFlag.HIDE_ATTRIBUTES);
+        addFlag(ItemFlag.HIDE_ENCHANTS);
         return modifyMeta(meta -> meta.addEnchant(Enchantment.LUCK, 1, true));
     }
 
