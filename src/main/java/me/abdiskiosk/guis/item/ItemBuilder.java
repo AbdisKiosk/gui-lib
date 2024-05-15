@@ -1,8 +1,10 @@
 package me.abdiskiosk.guis.item;
 
+import me.abdiskiosk.guis.state.State;
 import me.abdiskiosk.guis.util.Skull;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +23,10 @@ public class ItemBuilder {
 
     public static @NotNull ItemBuilder skull(@NotNull String texture) {
         return new ItemBuilder(Skull.fromTexture(texture));
+    }
+
+    public static @NotNull ItemBuilder head(@NotNull OfflinePlayer player) {
+        return new ItemBuilder(Skull.from(player));
     }
 
     public static @NotNull ItemBuilder pane(@NotNull PaneColor color) {
