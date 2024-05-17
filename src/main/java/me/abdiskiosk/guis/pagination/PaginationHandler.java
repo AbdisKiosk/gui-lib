@@ -59,8 +59,15 @@ public class PaginationHandler<T> {
                         .onClick(item.getClickListener());
                 continue;
             }
-            gui.set(new GUIItem(slot, nullItem));
+            setNullItem(slot);
         }
+    }
+
+    protected void setNullItem(int slot) {
+        if(nullItem == null) {
+            return;
+        }
+        gui.set(new GUIItem(slot, nullItem));
     }
 
     protected void clearSlots() {
