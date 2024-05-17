@@ -46,6 +46,10 @@ public class PaginationHandler<T> {
     }
 
     public boolean setPageIfNotEmpty(int page) {
+        if(page < 1) {
+            return false;
+        }
+
         List<T> objects = objectProvider.get(getRangeMin(page), getRangeMax(page));
         if(objects.isEmpty()) {
             return false;
@@ -55,9 +59,6 @@ public class PaginationHandler<T> {
     }
 
     public void setPage(int page) {
-        if(page <= 0) {
-            return;
-        }
         setObjects(objectProvider.get(getRangeMin(page), getRangeMax(page)));
     }
 
