@@ -43,30 +43,23 @@ public class PaginationHandler<T> {
         this.itemConverter = itemConverter;
         this.slots = slots;
         this.nullItem = nullItem;
-
-        setPage(1, false);
     }
 
-    public void setPageSafe(int page) {
-        setPage(page, true);
+    public boolean setPageIfNotEmpty(int page) {
+        List<T> objects = objectProvider.get(getRangeMin(page), getRangeMax(page));
+        if(objects.isEmpty()) {
+            return false;
+        }
+        setPage(page);
+        return true;
     }
 
     public void setPage(int page) {
-        setPage(page, false);
+        setObjects(objectProvider.get(getRangeMin(page), getRangeMax(page)));
     }
 
-    public void setPage(int page, boolean safe) {
+    protected void setObjects(@NotNull List<T> objects) {
         clearSlots();
-        if(page < 1) {
-            return;
-        }
-
-        List<T> objects = objectProvider.get(getRangeMin(page), getRangeMax(page));
-
-        if(objects.isEmpty() && safe) {
-            return;
-        }
-
         for(int i = 0; i < slots.size(); i++) {
             int slot = slots.get(i);
             if(i < objects.size()) {
