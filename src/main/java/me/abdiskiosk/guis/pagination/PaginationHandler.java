@@ -55,6 +55,9 @@ public class PaginationHandler<T> {
     }
 
     public void setPage(int page) {
+        if(page < 0) {
+            return;
+        }
         setObjects(objectProvider.get(getRangeMin(page), getRangeMax(page)));
     }
 
