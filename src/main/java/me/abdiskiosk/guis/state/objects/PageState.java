@@ -33,6 +33,14 @@ public class PageState implements State<Integer> {
         }
     }
 
+    public void nextPage() {
+        set(get() + 1);
+    }
+
+    public void previousPage() {
+        set(get() - 1);
+    }
+
     @Override
     public void update() {
         state.update();
