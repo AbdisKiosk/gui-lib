@@ -44,10 +44,10 @@ public class PaginationHandler<T> {
         this.slots = slots;
         this.nullItem = nullItem;
 
-        setPage(0);
+        setPage(1);
     }
 
-    public void setPage(@Range(from = 0, to = Integer.MAX_VALUE) int page) {
+    public void setPage(@Range(from = 1, to = Integer.MAX_VALUE) int page) {
         clearSlots();
         List<T> objects = objectProvider.get(getRangeMin(page), getRangeMax(page));
 
