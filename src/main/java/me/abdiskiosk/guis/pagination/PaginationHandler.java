@@ -54,7 +54,7 @@ public class PaginationHandler<T> {
         if(objects.isEmpty()) {
             return false;
         }
-        setPage(page);
+        setObjects(objects);
         return true;
     }
 
