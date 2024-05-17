@@ -26,6 +26,11 @@ public class GUIItem {
         this.slots = Collections.singleton(slot);
     }
 
+    public GUIItem(int slot, @NotNull ItemBuilder builder) {
+        this.item = builder.build();
+        this.slots = Collections.singleton(slot);
+    }
+
     public GUIItem(int row, int slot, @NotNull ItemStack item) {
         this.item = item.clone();
         this.slots = Collections.singleton(row * 9 + slot);

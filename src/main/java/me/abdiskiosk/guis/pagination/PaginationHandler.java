@@ -43,6 +43,8 @@ public class PaginationHandler<T> {
         this.itemConverter = itemConverter;
         this.slots = slots;
         this.nullItem = nullItem;
+
+        setPage(0);
     }
 
     public void setPage(@Range(from = 0, to = Integer.MAX_VALUE) int page) {
