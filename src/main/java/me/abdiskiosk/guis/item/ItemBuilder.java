@@ -11,10 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ItemBuilder {
@@ -51,6 +48,21 @@ public class ItemBuilder {
 
     public @NotNull ItemBuilder setLore(@NotNull List<@NotNull String> lore) {
         return modifyMeta(meta -> meta.setLore(lore));
+    }
+
+    public @NotNull ItemBuilder addLore(@NotNull String... lore) {
+        return addLore(Arrays.asList(lore));
+    }
+
+    public @NotNull ItemBuilder addLore(@NotNull List<@NotNull String> lore) {
+        return modifyMeta(meta -> {
+            List<String> currentLore = meta.getLore();
+            if(currentLore == null) {
+                currentLore = new java.util.ArrayList<>();
+            }
+            currentLore.addAll(lore);
+            meta.setLore(currentLore);
+        });
     }
 
     public @NotNull ItemBuilder removeEnchantments() {
