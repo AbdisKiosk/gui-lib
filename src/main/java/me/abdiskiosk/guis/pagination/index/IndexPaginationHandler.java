@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IndexPaginationHandler extends PaginationHandler<PaginationItem> {
-    
+
     public IndexPaginationHandler(@NotNull GUI gui,
                                   @NotNull List<Integer> slots,
                                   @NotNull IndexPaginationItemProvider itemProvider,

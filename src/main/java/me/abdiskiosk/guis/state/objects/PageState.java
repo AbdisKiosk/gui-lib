@@ -41,6 +41,10 @@ public class PageState implements State<Integer> {
         set(get() - 1);
     }
 
+    public void rerender() {
+        paginationHandler.setPage(get());
+    }
+
     @Override
     public void update() {
         state.update();
