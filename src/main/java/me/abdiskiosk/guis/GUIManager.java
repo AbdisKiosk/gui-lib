@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 public class GUIManager {
 
     private static GUIManager instance;
+    @Getter
+    private static Plugin plugin;
 
     @Getter @Setter
     private @NotNull PlaceholderApplier placeholderApplier = new SimplePlaceholderApplier();
@@ -28,6 +30,7 @@ public class GUIManager {
     }
 
     public static void registerListeners(@NotNull Plugin plugin) {
+        GUIManager.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(new BukkitListener(plugin), plugin);
     }
 }

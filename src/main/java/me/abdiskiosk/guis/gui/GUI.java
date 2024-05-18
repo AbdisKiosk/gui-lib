@@ -108,6 +108,10 @@ public class GUI implements GUIEventHandler {
         return GUIManager.getInstance().getPlaceholderApplier().replace(name, placeholders);
     }
 
+    public boolean isOpen() {
+        return view.isOpen();
+    }
+
     @Override
     public void handleDrag(@NotNull InventoryDragEvent event) {
         handleIfPresent(dragAction, event);

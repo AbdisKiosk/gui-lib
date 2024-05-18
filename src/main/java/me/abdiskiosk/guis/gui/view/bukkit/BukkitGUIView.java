@@ -75,6 +75,11 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
     }
 
     @Override
+    public boolean isOpen() {
+        return !inventory.getViewers().isEmpty();
+    }
+
+    @Override
     public void handleDrag(@NotNull InventoryDragEvent event) {
         for(int slot : event.getInventorySlots()) {
             ListenerItemStack listener = slotToListener.get(slot);
