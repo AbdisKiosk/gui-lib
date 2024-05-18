@@ -67,7 +67,7 @@ public class AutoUpdatingGUI extends GUI {
     }
 
     protected boolean shouldUpdateName(@NotNull NamedState<?> state) {
-        return name.contains("{" + state.getName() + "}");
+        return PlaceholderUtils.getUsedPlaceholders(name).contains(state.getName());
     }
 
 }
