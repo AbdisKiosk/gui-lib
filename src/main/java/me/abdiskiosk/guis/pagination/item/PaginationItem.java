@@ -47,4 +47,11 @@ public class PaginationItem {
         this.clickListener = clickListener;
         this.states = states;
     }
+
+    public PaginationItem(@NotNull ItemStack item, @NotNull Collection<StaticNamedState<?>> states,
+                          @NotNull Consumer<InventoryClickEvent> clickListener) {
+        this.item = item;
+        this.clickListener = clickListener;
+        this.states = states;
+    }
 }
