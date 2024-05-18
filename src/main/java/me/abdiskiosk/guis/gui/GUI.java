@@ -10,6 +10,7 @@ import me.abdiskiosk.guis.gui.view.bukkit.BukkitGUIView;
 import me.abdiskiosk.guis.item.GUIItem;
 import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
 import me.abdiskiosk.guis.state.NamedState;
+import me.abdiskiosk.guis.state.StaticNamedState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,10 +20,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class GUI implements GUIEventHandler {
@@ -41,6 +39,7 @@ public class GUI implements GUIEventHandler {
     private @Nullable Consumer<@NotNull Event> otherAction;
 
     protected final @NotNull Set<NamedState<?>> placeholders = new HashSet<>();
+    protected final @NotNull WeakHashMap<GUIItem, Set<StaticNamedState<?>>> itemToPlaceholders = new WeakHashMap<>();
 
     @Getter
     protected final int sizeSlots;
@@ -54,13 +53,23 @@ public class GUI implements GUIEventHandler {
         return view.setItem(parse(item));
     }
 
+    public synchronized ListenerItemStack set(@NotNull GUIItem item,
+                                              @NotNull Collection<@NotNull StaticNamedState<?>> placeholders) {
+        itemToPlaceholders.put(item, new HashSet<>(placeholders));
+        return view.setItem(parse(item));
+    }
+
     public void update(@NotNull GUIItem item) {
         view.updateItem(parse(item));
     }
 
     protected @NotNull GUIItem parse(@NotNull GUIItem item) {
+        Set<NamedState<?>> states = new HashSet<>(placeholders);
+        if(itemToPlaceholders.containsKey(item)) {
+            states.addAll(itemToPlaceholders.get(item));
+        }
         return PlaceholderUtils.withPlaceholders(item,
-                GUIManager.getInstance().getPlaceholderApplier(), placeholders);
+                GUIManager.getInstance().getPlaceholderApplier(), states);
     }
 
     public void open(@NotNull Player player) {

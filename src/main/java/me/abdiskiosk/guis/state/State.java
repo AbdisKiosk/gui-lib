@@ -33,4 +33,8 @@ public interface State<T> {
         return new IntState(value);
     }
 
+    static <T> StaticNamedState<T> immutable(T value, @NotNull String name) {
+        return new StaticNamedState<>(of(value), name);
+    }
+
 }

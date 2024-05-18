@@ -8,7 +8,7 @@ import java.util.Collection;
 public class SimplePlaceholderApplier implements PlaceholderApplier {
 
     @Override
-    public @NotNull String replace(@NotNull String text, @NotNull Collection<NamedState<?>> states) {
+    public @NotNull String replace(@NotNull String text, @NotNull Collection<? extends NamedState<?>> states) {
         for(NamedState<?> state : states) {
             text = text.replaceAll("\\{" + state.getName() + "}", state.get().toString());
         }

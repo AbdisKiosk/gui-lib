@@ -15,12 +15,12 @@ public class PlaceholderUtils {
     private static final Pattern PATTERN = Pattern.compile("\\{([^}]*)}");
 
     public static @NotNull GUIItem withPlaceholders(@NotNull GUIItem item, @NotNull PlaceholderApplier applier,
-                                  @NotNull Collection<@NotNull NamedState<?>> states) {
+                                  @NotNull Collection<@NotNull ? extends NamedState<?>> states) {
         return new GUIItem(item.getSlots(), withPlaceholders(item.getItem(), applier, states));
     }
 
     public static @NotNull ItemStack withPlaceholders(@NotNull ItemStack item, @NotNull PlaceholderApplier applier,
-                                  @NotNull Collection<@NotNull NamedState<?>> states) {
+                                  @NotNull Collection<@NotNull ? extends NamedState<?>> states) {
         ItemStack clone = item.clone();
         ItemMeta meta = clone.getItemMeta();
         if(meta == null) {
