@@ -16,7 +16,6 @@ public class StaticPaginationHandler extends PaginationHandler<PaginationItem> {
                                    @NotNull List<PaginationItem> items,
                                    @Nullable ItemStack nullItem) {
         super(gui, slots, new StaticPaginationObjectProvider<>(items), object -> object, nullItem);
-
     }
 
 }
