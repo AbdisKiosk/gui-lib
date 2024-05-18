@@ -84,7 +84,7 @@ public class GUI implements GUIEventHandler {
         view.removeItems(slots);
     }
 
-    public void remove(Integer... slots) {
+    public void remove(@NotNull Integer... slots) {
         view.removeItems(Arrays.asList(slots));
     }
 

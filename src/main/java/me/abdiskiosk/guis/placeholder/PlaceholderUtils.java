@@ -66,9 +66,12 @@ public class PlaceholderUtils {
         Set<String> placeholders = new HashSet<>();
         Matcher matcher = PATTERN.matcher(text);
         while (matcher.find()) {
-            placeholders.add(matcher.group());
+            String placeholder = matcher.group();
+            String[] parts = placeholder.split("\\.");
+            if (parts.length > 0) {
+                placeholders.add(parts[0]);
+            }
         }
         return placeholders;
     }
-
 }
