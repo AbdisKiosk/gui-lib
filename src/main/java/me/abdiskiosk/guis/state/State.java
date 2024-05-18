@@ -37,11 +37,11 @@ public interface State<T> {
         return new StaticNamedState<>(of(value), name);
     }
 
-    static <T> void subscribe(@NotNull State<T> state, @NotNull Consumer<T> subscriber) {
+    static <T> void subscribe(@NotNull Consumer<T> subscriber, @NotNull State<T> state) {
         state.subscribe(subscriber);
     }
 
-    static <T1, T2> void subscribe(@NotNull State<T1> state1, @NotNull State<T2> state2, @NotNull BiConsumer<T1, T2> subscriber) {
+    static <T1, T2> void subscribe(@NotNull BiConsumer<T1, T2> subscriber, @NotNull State<T1> state1, @NotNull State<T2> state2) {
         state1.subscribe(value -> subscriber.accept(value, state2.get()));
         state2.subscribe(value -> subscriber.accept(state1.get(), value));
     }
