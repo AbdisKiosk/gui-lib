@@ -68,7 +68,7 @@ public class PaginationHandler<T> {
             int slot = slots.get(i);
             if(i < objects.size()) {
                 PaginationItem item = itemConverter.convert(objects.get(i));
-                gui.set(new GUIItem(slot, item.getItem()))
+                gui.set(new GUIItem(slot, item.getItem()), item.getStates())
                         .onClick(item.getClickListener());
                 continue;
             }
