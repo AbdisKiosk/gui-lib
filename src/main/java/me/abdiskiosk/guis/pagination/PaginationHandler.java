@@ -38,6 +38,8 @@ public class PaginationHandler<T> {
 
     private final AtomicBoolean updating = new AtomicBoolean(false);
 
+    //TODO: Function<Slot, PaginationItem> til nullItem samt waitingItem
+
     public PaginationHandler(@NotNull GUI gui,
                              @NotNull List<Integer> slots,
                              @NotNull PaginationObjectProvider<T> objectProvider,
