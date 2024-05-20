@@ -36,7 +36,7 @@ public class Scheduler {
         public void run() {
             run.run();
             if(gui.isOpen()) {
-                runTaskLater(GUIManager.getPlugin(), waitTicks);
+                new Task(gui, waitTicks, run).runTaskLater(GUIManager.getPlugin(), waitTicks);
             }
         }
     }
