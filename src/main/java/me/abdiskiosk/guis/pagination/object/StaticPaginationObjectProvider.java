@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class StaticPaginationObjectProvider<T> implements PaginationObjectProvider<T> {
@@ -15,10 +16,10 @@ public class StaticPaginationObjectProvider<T> implements PaginationObjectProvid
     }
 
     @Override
-    public @NotNull List<@NotNull T> get(int minIndexInclusive, int maxIndexInclusive) {
-        return objects.stream()
+    public @NotNull CompletableFuture<List<@NotNull T>> get(int minIndexInclusive, int maxIndexInclusive) {
+        return CompletableFuture.completedFuture(objects.stream()
                 .skip(minIndexInclusive)
                 .limit(maxIndexInclusive - minIndexInclusive + 1)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 }

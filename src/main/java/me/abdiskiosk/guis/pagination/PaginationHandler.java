@@ -6,12 +6,14 @@ import me.abdiskiosk.guis.item.GUIItem;
 import me.abdiskiosk.guis.pagination.item.PaginationItem;
 import me.abdiskiosk.guis.pagination.item.PaginationItemConverter;
 import me.abdiskiosk.guis.pagination.object.PaginationObjectProvider;
+import me.abdiskiosk.guis.util.Scheduler;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class PaginationHandler<T> {
 
@@ -45,35 +47,41 @@ public class PaginationHandler<T> {
         this.nullItem = nullItem;
     }
 
-    public boolean setPageIfNotEmpty(int page) {
+    public CompletableFuture<Boolean> setPageIfNotEmpty(int page) {
         if(page < 1) {
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
 
-        List<T> objects = objectProvider.get(getRangeMin(page), getRangeMax(page));
-        if(objects.isEmpty()) {
-            return false;
-        }
-        setObjects(objects);
-        return true;
+        CompletableFuture<Boolean> setPage = new CompletableFuture<>();
+        objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(objects -> {
+            if(objects.isEmpty()) {
+                setPage.complete(false);
+            }
+            setObjects(objects);
+            setPage.complete(true);
+        });
+
+        return setPage;
     }
 
     public void setPage(int page) {
-        setObjects(objectProvider.get(getRangeMin(page), getRangeMax(page)));
+        objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(this::setObjects);
     }
 
     protected void setObjects(@NotNull List<T> objects) {
-        clearSlots();
-        for(int i = 0; i < slots.size(); i++) {
-            int slot = slots.get(i);
-            if(i < objects.size()) {
-                PaginationItem item = itemConverter.convert(objects.get(i));
-                gui.set(new GUIItem(slot, item.getItem()), item.getStates())
-                        .onClick(item.getClickListener());
-                continue;
+        Scheduler.sync(() -> {
+            clearSlots();
+            for(int i = 0; i < slots.size(); i++) {
+                int slot = slots.get(i);
+                if(i < objects.size()) {
+                    PaginationItem item = itemConverter.convert(objects.get(i));
+                    gui.set(new GUIItem(slot, item.getItem()), item.getStates())
+                            .onClick(item.getClickListener());
+                    continue;
+                }
+                setNullItem(slot);
             }
-            setNullItem(slot);
-        }
+        });
     }
 
     protected void setNullItem(int slot) {

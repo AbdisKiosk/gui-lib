@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class IndexPaginationHandler extends PaginationHandler<PaginationItem> {
 
@@ -19,8 +20,8 @@ public class IndexPaginationHandler extends PaginationHandler<PaginationItem> {
         super(gui, slots, (min, max) -> generateItems(min, max, itemProvider), item -> item, nullItem);
     }
 
-    protected static List<PaginationItem> generateItems(int rangeMinInclusive, int rangeMaxInclusive,
-                                                   IndexPaginationItemProvider itemProvider) {
+    protected static CompletableFuture<List<PaginationItem>> generateItems(int rangeMinInclusive, int rangeMaxInclusive,
+                                                                          IndexPaginationItemProvider itemProvider) {
         List<PaginationItem> items = new ArrayList<>();
         for(int i = rangeMinInclusive; i <= rangeMaxInclusive; i++) {
             try {
@@ -29,7 +30,7 @@ public class IndexPaginationHandler extends PaginationHandler<PaginationItem> {
                 break;
             }
         }
-        return items;
+        return CompletableFuture.completedFuture(items);
     }
 
 }
