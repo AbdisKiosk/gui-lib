@@ -2,6 +2,7 @@ package me.abdiskiosk.guis.state.objects;
 
 import me.abdiskiosk.guis.pagination.PaginationHandler;
 import me.abdiskiosk.guis.state.State;
+import me.abdiskiosk.guis.util.Scheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;

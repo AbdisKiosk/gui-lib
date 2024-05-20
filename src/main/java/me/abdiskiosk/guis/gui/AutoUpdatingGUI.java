@@ -4,6 +4,7 @@ import me.abdiskiosk.guis.gui.view.ListenerItemStack;
 import me.abdiskiosk.guis.item.GUIItem;
 import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
 import me.abdiskiosk.guis.state.NamedState;
+import me.abdiskiosk.guis.util.Scheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -49,14 +50,16 @@ public class AutoUpdatingGUI extends GUI {
     }
 
     protected void onUpdate(@NotNull NamedState<?> state) {
-        Set<GUIItem> toUpdate = getToUpdate(state);
-        for(GUIItem item : toUpdate) {
-            super.update(item);
-        }
+        Scheduler.sync(() -> {
+            Set<GUIItem> toUpdate = getToUpdate(state);
+            for (GUIItem item : toUpdate) {
+                super.update(item);
+            }
 
-        if(shouldUpdateName(state)) {
-            super.setName(name);
-        }
+            if (shouldUpdateName(state)) {
+                super.setName(name);
+            }
+        });
     }
 
     protected @NotNull Set<@NotNull GUIItem> getToUpdate(@NotNull NamedState<?> state) {
