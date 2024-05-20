@@ -55,9 +55,9 @@ public class PaginationHandler<T> {
             return CompletableFuture.completedFuture(false);
         }
 
+        updating.set(true);
         CompletableFuture<Boolean> setPage = new CompletableFuture<>();
         objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(objects -> {
-            updating.set(true);
             if(objects.isEmpty()) {
                 setPage.complete(false);
             }
@@ -74,8 +74,8 @@ public class PaginationHandler<T> {
             return;
         }
 
+        updating.set(true);
         objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(objects -> {
-            updating.set(true);
             setObjects(objects);
             updating.set(false);
         });
