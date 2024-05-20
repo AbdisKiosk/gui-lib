@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Range;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PaginationHandler<T> {
 
@@ -35,6 +36,8 @@ public class PaginationHandler<T> {
     @Nullable
     private final ItemStack nullItem;
 
+    private final AtomicBoolean updating = new AtomicBoolean(false);
+
     public PaginationHandler(@NotNull GUI gui,
                              @NotNull List<Integer> slots,
                              @NotNull PaginationObjectProvider<T> objectProvider,
@@ -48,24 +51,34 @@ public class PaginationHandler<T> {
     }
 
     public CompletableFuture<Boolean> setPageIfNotEmpty(int page) {
-        if(page < 1) {
+        if(page < 1 || updating.get()) {
             return CompletableFuture.completedFuture(false);
         }
 
         CompletableFuture<Boolean> setPage = new CompletableFuture<>();
         objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(objects -> {
+            updating.set(true);
             if(objects.isEmpty()) {
                 setPage.complete(false);
             }
             setObjects(objects);
             setPage.complete(true);
+            updating.set(false);
         });
 
         return setPage;
     }
 
     public void setPage(int page) {
-        objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(this::setObjects);
+        if(updating.get()) {
+            return;
+        }
+
+        objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(objects -> {
+            updating.set(true);
+            setObjects(objects);
+            updating.set(false);
+        });
     }
 
     protected void setObjects(@NotNull List<T> objects) {
