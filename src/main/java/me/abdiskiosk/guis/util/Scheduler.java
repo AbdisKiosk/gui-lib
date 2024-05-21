@@ -17,6 +17,10 @@ public class Scheduler {
     }
 
     public static void sync(@NotNull Runnable runnable) {
+        if(Bukkit.isPrimaryThread()) {
+            runnable.run();
+            return;
+        }
         Bukkit.getScheduler().runTask(GUIManager.getPlugin(), runnable);
     }
 

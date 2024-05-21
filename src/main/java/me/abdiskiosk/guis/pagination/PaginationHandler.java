@@ -10,11 +10,11 @@ import me.abdiskiosk.guis.util.Scheduler;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PaginationHandler<T> {
 
@@ -36,7 +36,7 @@ public class PaginationHandler<T> {
     @Nullable
     private final ItemStack nullItem;
 
-    private final AtomicBoolean updating = new AtomicBoolean(false);
+    private final AtomicInteger version = new AtomicInteger(0);
 
     //TODO: Function<Slot, PaginationItem> til nullItem samt waitingItem
 
@@ -53,33 +53,36 @@ public class PaginationHandler<T> {
     }
 
     public CompletableFuture<Boolean> setPageIfNotEmpty(int page) {
-        if(page < 1 || updating.get()) {
+        if(page < 1) {
             return CompletableFuture.completedFuture(false);
         }
 
-        updating.set(true);
+        final int expectedVersion = version.incrementAndGet();
         CompletableFuture<Boolean> setPage = new CompletableFuture<>();
         objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(objects -> {
+            if(version.get() != expectedVersion) {
+                setPage.complete(false);
+                return;
+            }
+
             if(objects.isEmpty()) {
                 setPage.complete(false);
             }
             setObjects(objects);
             setPage.complete(true);
-            updating.set(false);
         });
 
         return setPage;
     }
 
     public void setPage(int page) {
-        if(updating.get()) {
-            return;
-        }
+        final int expectedVersion = version.incrementAndGet();
 
-        updating.set(true);
         objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(objects -> {
+            if(version.get() != expectedVersion) {
+                return;
+            }
             setObjects(objects);
-            updating.set(false);
         });
     }
 
