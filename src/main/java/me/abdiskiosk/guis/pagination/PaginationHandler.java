@@ -52,28 +52,34 @@ public class PaginationHandler<T> {
         this.nullItem = nullItem;
     }
 
-    public CompletableFuture<Boolean> setPageIfNotEmpty(int page) {
+    public CompletableFuture<PageResult> attemptSetPage(int page) {
         if(page < 1) {
-            return CompletableFuture.completedFuture(false);
+            return CompletableFuture.completedFuture(PageResult.EMPTY);
         }
 
         final int expectedVersion = version.incrementAndGet();
-        CompletableFuture<Boolean> setPage = new CompletableFuture<>();
+        CompletableFuture<PageResult> setPage = new CompletableFuture<>();
         objectProvider.get(getRangeMin(page), getRangeMax(page)).thenAccept(objects -> {
             if(version.get() != expectedVersion) {
-                setPage.complete(false);
+                setPage.complete(PageResult.INVALID_VERSION);
                 return;
             }
 
             if(objects.isEmpty()) {
-                setPage.complete(false);
+                setPage.complete(PageResult.EMPTY);
                 return;
             }
             setObjects(objects);
-            setPage.complete(true);
+            setPage.complete(PageResult.SUCCESS);
         });
 
         return setPage;
+    }
+
+    public enum PageResult {
+        SUCCESS,
+        INVALID_VERSION,
+        EMPTY,
     }
 
     public void setPage(int page) {

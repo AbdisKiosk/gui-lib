@@ -29,8 +29,8 @@ public class PageState implements State<Integer> {
         if(value < 0) {
             return;
         }
-        paginationHandler.setPageIfNotEmpty(value).thenAccept(success -> {
-            if(success) {
+        paginationHandler.attemptSetPage(value).thenAccept(result -> {
+            if(!result.equals(PaginationHandler.PageResult.EMPTY)) {
                 state.set(value);
             }
         });
