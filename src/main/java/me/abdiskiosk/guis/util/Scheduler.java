@@ -6,6 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
+
 public class Scheduler {
 
     public static void whileOpen(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
@@ -14,6 +17,14 @@ public class Scheduler {
 
     public static void async(@NotNull Runnable runnable) {
         Bukkit.getScheduler().runTaskAsynchronously(GUIManager.getPlugin(), runnable);
+    }
+
+    public static <T> CompletableFuture<T> async(@NotNull Supplier<T> supplier) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        Bukkit.getScheduler().runTaskAsynchronously(GUIManager.getPlugin(), () -> {
+            future.complete(supplier.get());
+        });
+        return future;
     }
 
     public static void sync(@NotNull Runnable runnable) {
