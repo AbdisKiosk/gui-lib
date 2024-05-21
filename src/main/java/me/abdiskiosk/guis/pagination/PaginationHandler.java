@@ -67,6 +67,7 @@ public class PaginationHandler<T> {
 
             if(objects.isEmpty()) {
                 setPage.complete(false);
+                return;
             }
             setObjects(objects);
             setPage.complete(true);
