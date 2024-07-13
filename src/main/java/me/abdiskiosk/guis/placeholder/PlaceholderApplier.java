@@ -12,11 +12,15 @@ public interface PlaceholderApplier {
     @NotNull String replace(@NotNull String text, @NotNull Collection<@NotNull ? extends NamedState<?>> states);
 
     default @NotNull List<@NotNull String> replace(@NotNull List<@NotNull String> text,
-                                                   @NotNull Collection<@NotNull? extends NamedState<?>> states) {
-        List<String> replaced = new ArrayList<>(text);
-        for(int i = 0; i < text.size(); i++) {
-            replaced.set(i, replace(text.get(i), states));
+                                           @NotNull Collection<@NotNull? extends NamedState<?>> states) {
+        List<String> replaced = new ArrayList<>();
+        for(String str : text) {
+            String replacedString = replace(str, states);
+            String[] lines = replacedString.split("\\n");
+            
+            replaced.addAll(Arrays.asList(lines));
         }
         return replaced;
     }
+    
 }
