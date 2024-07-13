@@ -3,8 +3,10 @@ package me.abdiskiosk.guis.gui;
 import me.abdiskiosk.guis.gui.view.ListenerItemStack;
 import me.abdiskiosk.guis.item.GUIItem;
 import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
+import me.abdiskiosk.guis.reflection.StateFinder;
 import me.abdiskiosk.guis.state.NamedState;
 import me.abdiskiosk.guis.util.Scheduler;
+import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -71,6 +73,12 @@ public class AutoUpdatingGUI extends GUI {
 
     protected boolean shouldUpdateName(@NotNull NamedState<?> state) {
         return PlaceholderUtils.getUsedPlaceholders(name).contains(state.getName());
+    }
+
+    @Override
+    public void open(@NotNull HumanEntity human) {
+        registerPlaceholders(StateFinder.findStates(this));
+        super.open(human);
     }
 
 }
