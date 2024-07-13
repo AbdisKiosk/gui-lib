@@ -28,7 +28,7 @@ public class StateFinder {
     protected static @NotNull State<?> stateOf(@NotNull Field field, @NotNull Object object) throws IllegalAccessException {
         field.setAccessible(true);
         Object value = field.get(object);
-        if(value instanceof State<?>) {
+        if(value.getClass().isAssignableFrom(State.class)) {
             return (State<?>) value;
         }
         return new UnmodifiableState<>(value);
