@@ -30,7 +30,7 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
     }
 
     @Override
-    public void open(@NotNull Player player) {
+    public void open(@NotNull HumanEntity player) {
         player.openInventory(inventory);
     }
 

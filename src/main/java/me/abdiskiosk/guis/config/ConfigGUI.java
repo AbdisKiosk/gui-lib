@@ -2,9 +2,8 @@ package me.abdiskiosk.guis.config;
 
 import lombok.Getter;
 import me.abdiskiosk.guis.gui.AutoUpdatingGUI;
-import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
 import me.abdiskiosk.guis.reflection.StateFinder;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfigGUI<T extends GUIConfig> extends AutoUpdatingGUI {
@@ -22,7 +21,7 @@ public class ConfigGUI<T extends GUIConfig> extends AutoUpdatingGUI {
     }
 
     @Override
-    public void open(@NotNull Player player) {
+    public void open(@NotNull HumanEntity player) {
         //TODO: dont rerender when player opens
         registerPlaceholders(StateFinder.findStates(this));
         super.open(player);

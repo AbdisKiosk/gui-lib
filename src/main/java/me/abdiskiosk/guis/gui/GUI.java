@@ -11,6 +11,7 @@ import me.abdiskiosk.guis.item.GUIItem;
 import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
 import me.abdiskiosk.guis.state.NamedState;
 import me.abdiskiosk.guis.state.StaticNamedState;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -72,7 +73,7 @@ public class GUI implements GUIEventHandler {
                 GUIManager.getInstance().getPlaceholderApplier(), states);
     }
 
-    public void open(@NotNull Player player) {
+    public void open(@NotNull HumanEntity player) {
         view.open(player);
     }
 
