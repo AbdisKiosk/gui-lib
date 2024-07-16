@@ -22,7 +22,7 @@ public class NamedState<T> implements State<T> {
 
 
     @Override
-    public T get() {
+    public T get()   {
         return state.get();
     }
 

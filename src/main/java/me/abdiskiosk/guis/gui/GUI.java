@@ -1,5 +1,6 @@
 package me.abdiskiosk.guis.gui;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import me.abdiskiosk.guis.GUIManager;
@@ -26,6 +27,7 @@ import java.util.function.Consumer;
 
 public class GUI implements GUIEventHandler {
 
+    @Getter(AccessLevel.PROTECTED)
     private final @NotNull GUIView view;
 
     @Setter @Getter
