@@ -42,7 +42,7 @@ public class GUI implements GUIEventHandler {
     private @Nullable Consumer<@NotNull Event> otherAction;
 
     protected final @NotNull Set<NamedState<?>> placeholders = new HashSet<>();
-    protected final @NotNull WeakHashMap<GUIItem, Set<StaticNamedState<?>>> itemToPlaceholders = new WeakHashMap<>();
+    protected final @NotNull Map<GUIItem, Set<StaticNamedState<?>>> itemToPlaceholders = new HashMap<>();
 
     @Getter
     protected final int sizeSlots;

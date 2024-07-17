@@ -25,10 +25,11 @@ public class StateFinder {
         return states;
     }
 
+    @SuppressWarnings("all")
     protected static @NotNull State<?> stateOf(@NotNull Field field, @NotNull Object object) throws IllegalAccessException {
         field.setAccessible(true);
         Object value = field.get(object);
-        if(value.getClass().isAssignableFrom(State.class)) {
+        if(value instanceof State || value.getClass().isAssignableFrom(State.class)) {
             return (State<?>) value;
         }
         return new UnmodifiableState<>(value);

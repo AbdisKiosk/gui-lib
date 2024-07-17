@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 
 public class NamedState<T> implements State<T> {
 
-
     @NotNull
     private final State<T> state;
     @NotNull
@@ -22,7 +21,7 @@ public class NamedState<T> implements State<T> {
 
 
     @Override
-    public T get()   {
+    public T get() {
         return state.get();
     }
 

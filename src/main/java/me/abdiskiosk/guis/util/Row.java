@@ -14,6 +14,7 @@ public class Row {
     public static final List<Integer> SIXTH = Arrays.asList(45, 46, 47, 48, 49, 50, 51, 52, 53);
 
 
+    @SafeVarargs
     public static List<Integer> combined(List<Integer>... rows) {
         List<Integer> combined = new ArrayList<>();
         for (List<Integer> row : rows) {
