@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class AutoUpdatingGUI extends GUI {
 
-
+    private boolean registered = false;
     private @NotNull String name;
     private final @NotNull Map<@NotNull GUIItem, @NotNull Set<@NotNull String>> itemToUsedPlaceholders = new HashMap<>();
 
@@ -76,8 +76,11 @@ public class AutoUpdatingGUI extends GUI {
     }
 
     @Override
-    public void open(@NotNull HumanEntity human) {
-        registerPlaceholders(StateFinder.findStates(this));
+    public synchronized void open(@NotNull HumanEntity human) {
+        if(!registered) {
+            registerPlaceholders(StateFinder.findStates(this));
+        }
+        registered = true;
         super.open(human);
     }
 
