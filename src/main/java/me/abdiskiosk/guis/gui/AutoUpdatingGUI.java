@@ -46,7 +46,7 @@ public class AutoUpdatingGUI extends GUI {
     }
 
     @Override
-    public void remove(@NotNull GUIItem item) {
+    public synchronized void remove(@NotNull GUIItem item) {
         itemToUsedPlaceholders.remove(item);
         super.remove(item);
     }
@@ -64,7 +64,7 @@ public class AutoUpdatingGUI extends GUI {
         });
     }
 
-    protected @NotNull Set<@NotNull GUIItem> getToUpdate(@NotNull NamedState<?> state) {
+    protected synchronized @NotNull Set<@NotNull GUIItem> getToUpdate(@NotNull NamedState<?> state) {
         return itemToUsedPlaceholders.entrySet().stream()
                 .filter(entry -> entry.getValue().contains("{" + state.getName() + "}"))
                 .map(Map.Entry::getKey)
