@@ -10,13 +10,15 @@ import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 public class AutoUpdatingGUI extends GUI {
 
     private boolean registered = false;
     private @NotNull String name;
-    private final @NotNull Map<@NotNull GUIItem, @NotNull Set<@NotNull String>> itemToUsedPlaceholders = new HashMap<>();
+    private final @NotNull ConcurrentMap<@NotNull GUIItem, @NotNull Set<@NotNull String>> itemToUsedPlaceholders = new ConcurrentHashMap<>();
 
     public AutoUpdatingGUI(@NotNull String name, int sizeSlots) {
         super(name, sizeSlots);
@@ -27,7 +29,7 @@ public class AutoUpdatingGUI extends GUI {
     public void registerPlaceholders(@NotNull Collection<@NotNull NamedState<?>> states) {
         super.registerPlaceholders(states);
 
-        for(NamedState<?> state : states) {
+        for (NamedState<?> state : states) {
             state.subscribe(value -> onUpdate(state));
         }
     }
@@ -39,14 +41,14 @@ public class AutoUpdatingGUI extends GUI {
     }
 
     @Override
-    public synchronized ListenerItemStack set(@NotNull GUIItem item) {
+    public ListenerItemStack set(@NotNull GUIItem item) {
         Set<String> usedPlaceholders = PlaceholderUtils.getUsedPlaceholders(item.getItem());
         itemToUsedPlaceholders.put(item, new HashSet<>(usedPlaceholders));
         return super.set(item);
     }
 
     @Override
-    public synchronized void remove(@NotNull GUIItem item) {
+    public void remove(@NotNull GUIItem item) {
         itemToUsedPlaceholders.remove(item);
         super.remove(item);
     }
@@ -64,7 +66,7 @@ public class AutoUpdatingGUI extends GUI {
         });
     }
 
-    protected synchronized @NotNull Set<@NotNull GUIItem> getToUpdate(@NotNull NamedState<?> state) {
+    protected @NotNull Set<@NotNull GUIItem> getToUpdate(@NotNull NamedState<?> state) {
         return itemToUsedPlaceholders.entrySet().stream()
                 .filter(entry -> entry.getValue().contains("{" + state.getName() + "}"))
                 .map(Map.Entry::getKey)
@@ -76,8 +78,8 @@ public class AutoUpdatingGUI extends GUI {
     }
 
     @Override
-    public synchronized void open(@NotNull HumanEntity human) {
-        if(!registered) {
+    public void open(@NotNull HumanEntity human) {
+        if (!registered) {
             registerPlaceholders(StateFinder.findStates(this));
         }
         registered = true;
