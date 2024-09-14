@@ -44,20 +44,16 @@ public class PlaceholderUtils {
             return Collections.emptySet();
         }
 
-        Set<String> strings = new HashSet<>();
+        Set<String> placeholders = new HashSet<>();
         if(item.getItemMeta().hasDisplayName()) {
-            strings.addAll(getUsedPlaceholders(item.getItemMeta().getDisplayName()));
+            placeholders.addAll(getUsedPlaceholders(item.getItemMeta().getDisplayName()));
         }
         if(item.getItemMeta().hasLore()) {
             for(String lore : item.getItemMeta().getLore()) {
-                strings.addAll(getUsedPlaceholders(lore));
+                placeholders.addAll(getUsedPlaceholders(lore));
             }
         }
 
-        Set<String> placeholders = new HashSet<>();
-        for(String string : strings) {
-            placeholders.addAll(getUsedPlaceholders(string));
-        }
 
         return placeholders;
     }
