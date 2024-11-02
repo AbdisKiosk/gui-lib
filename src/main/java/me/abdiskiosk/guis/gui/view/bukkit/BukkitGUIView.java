@@ -56,6 +56,7 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
     @Override
     public void removeItems(@NotNull Collection<@NotNull Integer> slots) {
         for(int slot : slots) {
+            slotToListener.remove(slot);
             inventory.setItem(slot, null);
         }
     }
