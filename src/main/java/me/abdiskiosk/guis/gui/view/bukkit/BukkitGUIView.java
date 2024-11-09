@@ -4,6 +4,7 @@ import me.abdiskiosk.guis.event.GUIEventHandler;
 import me.abdiskiosk.guis.gui.view.GUIView;
 import me.abdiskiosk.guis.gui.view.ListenerItemStack;
 import me.abdiskiosk.guis.item.GUIItem;
+import me.abdiskiosk.guis.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -31,7 +32,7 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
 
     @Override
     public void open(@NotNull HumanEntity player) {
-        player.openInventory(inventory);
+        Scheduler.sync(() -> player.openInventory(inventory));
     }
 
     @Override
