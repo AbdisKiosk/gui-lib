@@ -7,9 +7,10 @@ public class PlaceholderUtilTest {
 
     @Test
     public void withDotSeperatedPlaceholder_rootPlaceholderIsReturned() {
-        String testPlaceholderString = "placeholder used is {selected.pretty}";
+        String testPlaceholderString = "placeholder used is {selected.pretty} {test|loader...}";
 
         assert PlaceholderUtils.getUsedPlaceholders(testPlaceholderString).contains("selected")
+                && PlaceholderUtils.getUsedPlaceholders(testPlaceholderString).contains("test")
                 && !PlaceholderUtils.getUsedPlaceholders(testPlaceholderString).contains("pretty");
     }
 }

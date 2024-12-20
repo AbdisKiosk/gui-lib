@@ -63,7 +63,7 @@ public class PlaceholderUtils {
         Matcher matcher = PATTERN.matcher(text);
         while (matcher.find()) {
             String placeholder = matcher.group(1); // get the first captured group
-            String[] parts = placeholder.split("\\.");
+            String[] parts = placeholder.split("\\|")[0].split("\\.");
             if (parts.length > 0) {
                 placeholders.add(parts[0]);
             }
