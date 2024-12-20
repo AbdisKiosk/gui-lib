@@ -1,6 +1,8 @@
 package me.abdiskiosk.guis.gui.view;
 
+import me.abdiskiosk.guis.GUIManager;
 import me.abdiskiosk.guis.event.GUIClickEventHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +22,11 @@ public class ListenerItemStack implements GUIClickEventHandler {
 
     public synchronized void onClick(@NotNull Consumer<@NotNull InventoryClickEvent> listener) {
         clickListeners.add(listener);
+    }
+
+    public synchronized void onClickAsync(@NotNull Consumer<@NotNull InventoryClickEvent> listener) {
+        clickListeners.add(event -> Bukkit.getScheduler().runTaskAsynchronously(GUIManager.getPlugin(),
+                () -> listener.accept(event)));
     }
 
     public synchronized void handleDrag(@NotNull InventoryDragEvent event) {
