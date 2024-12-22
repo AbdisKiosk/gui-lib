@@ -85,6 +85,11 @@ public class ItemBuilder {
         return modifyMeta(meta -> meta.addEnchant(Enchantment.LUCK, 1, true));
     }
 
+    public @NotNull ItemBuilder setAmount(int amount) {
+        item.setAmount(amount);
+        return this;
+    }
+
     public @NotNull ItemBuilder addFlag(@NotNull ItemFlag flag) {
         return modifyMeta(meta -> meta.addItemFlags(flag));
     }
