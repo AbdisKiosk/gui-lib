@@ -11,6 +11,10 @@ import java.util.function.Supplier;
 
 public class Scheduler {
 
+    public static void nextTick(@NotNull Runnable runnable) {
+        Bukkit.getScheduler().runTaskLater(GUIManager.getPlugin(), runnable, 1L);
+    }
+
     public static void whileOpen(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
         new Task(gui, waitTicks, runnable).runTask(GUIManager.getPlugin());
     }

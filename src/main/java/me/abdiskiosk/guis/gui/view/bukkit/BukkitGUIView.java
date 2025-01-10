@@ -22,6 +22,7 @@ import java.util.*;
 
 public class BukkitGUIView implements GUIView, InventoryHolder {
 
+    private boolean reopeningNextTick = false;
     private @NotNull Inventory inventory;
     private final @NotNull Map<@NotNull Integer, @NotNull ListenerItemStack> slotToListener = new HashMap<>();
 
@@ -53,7 +54,9 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
     public void updateItem(@NotNull GUIItem item) {
         for(int slot : item.getSlots()) {
             inventory.setItem(slot, item.getItem());
-            new ArrayList<>(inventory.getViewers()).forEach(viewer -> viewer.openInventory(inventory));
+            if(!reopeningNextTick) {
+                reopenInATick();
+            }
         }
     }
 
@@ -119,5 +122,14 @@ public class BukkitGUIView implements GUIView, InventoryHolder {
     @Override
     public void handleClose(@NotNull InventoryCloseEvent event) {
         eventHandler.handleClose(event);
+    }
+
+    public void reopenInATick() {
+        reopeningNextTick = true;
+        Scheduler.nextTick(this::reopenNow);
+    }
+
+    public void reopenNow() {
+        new ArrayList<>(inventory.getViewers()).forEach(viewer -> viewer.openInventory(inventory));
     }
 }

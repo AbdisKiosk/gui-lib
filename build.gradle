@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'me.abdiskiosk'
-version = '0.0.29'
+group = 'com.github.abdiskiosk'
+version = '0.0.34'
 
 repositories {
     mavenCentral()
@@ -35,7 +35,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = group
-            artifactId = 'new-guis'
+            artifactId = 'gui-lib'
             version = version
             from components.java
         }
