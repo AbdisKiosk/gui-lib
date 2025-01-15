@@ -20,7 +20,7 @@ public class Scheduler {
     }
 
     public static void whileOpenAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
-        new Task(gui, waitTicks, true, runnable).runTask(GUIManager.getPlugin());
+        new Task(gui, waitTicks, true, runnable).runTaskAsynchronously(GUIManager.getPlugin());
     }
 
     public static void async(@NotNull Runnable runnable) {
