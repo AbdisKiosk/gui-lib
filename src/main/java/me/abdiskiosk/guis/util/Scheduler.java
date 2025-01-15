@@ -16,11 +16,11 @@ public class Scheduler {
     }
 
     public static void whileOpen(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
-        new Task(gui, waitTicks, false, runnable).runTask(GUIManager.getPlugin());
+        new Task(gui, waitTicks, false, true, runnable).runTask(GUIManager.getPlugin());
     }
 
     public static void whileOpenAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
-        new Task(gui, waitTicks, true, runnable).runTaskAsynchronously(GUIManager.getPlugin());
+        new Task(gui, waitTicks, true, true, runnable).runTaskAsynchronously(GUIManager.getPlugin());
     }
 
     public static void async(@NotNull Runnable runnable) {
@@ -48,14 +48,15 @@ public class Scheduler {
         private final Runnable run;
         private final int waitTicks;
         private final GUI gui;
-        private boolean async;
-        private boolean firstRun = true;
+        private final boolean async;
+        private final boolean firstRun;
 
-        public Task(@NotNull GUI gui, int waitTicks, boolean async, @NotNull Runnable run) {
+        public Task(@NotNull GUI gui, int waitTicks, boolean async, boolean firstRun, @NotNull Runnable run) {
             this.gui = gui;
             this.run = run;
             this.async = async;
             this.waitTicks = waitTicks;
+            this.firstRun = firstRun;
         }
 
         @Override
@@ -63,11 +64,10 @@ public class Scheduler {
             run.run();
             if(firstRun || gui.isOpen()) {
                 if(async) {
-                    runTaskLaterAsynchronously(GUIManager.getPlugin(), waitTicks);
+                    new Task(gui, waitTicks, async, false, run).runTaskLaterAsynchronously(GUIManager.getPlugin(), waitTicks);
                 } else {
-                    runTaskLater(GUIManager.getPlugin(), waitTicks);
+                    new Task(gui, waitTicks, async, false, run).runTaskLater(GUIManager.getPlugin(), waitTicks);
                 }
-                firstRun = false;
             }
         }
     }
