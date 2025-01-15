@@ -16,7 +16,11 @@ public class Scheduler {
     }
 
     public static void whileOpen(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
-        new Task(gui, waitTicks, runnable).runTask(GUIManager.getPlugin());
+        new Task(gui, waitTicks, false, runnable).runTask(GUIManager.getPlugin());
+    }
+
+    public static void whileOpenAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
+        new Task(gui, waitTicks, true, runnable).runTask(GUIManager.getPlugin());
     }
 
     public static void async(@NotNull Runnable runnable) {
@@ -44,18 +48,26 @@ public class Scheduler {
         private final Runnable run;
         private final int waitTicks;
         private final GUI gui;
+        private boolean async;
+        private boolean firstRun = true;
 
-        public Task(@NotNull GUI gui, int waitTicks, @NotNull Runnable run) {
+        public Task(@NotNull GUI gui, int waitTicks, boolean async, @NotNull Runnable run) {
             this.gui = gui;
             this.run = run;
+            this.async = async;
             this.waitTicks = waitTicks;
         }
 
         @Override
         public void run() {
             run.run();
-            if(gui.isOpen()) {
-                new Task(gui, waitTicks, run).runTaskLater(GUIManager.getPlugin(), waitTicks);
+            if(firstRun || gui.isOpen()) {
+                if(async) {
+                    runTaskLaterAsynchronously(GUIManager.getPlugin(), waitTicks);
+                } else {
+                    runTaskLater(GUIManager.getPlugin(), waitTicks);
+                }
+                firstRun = false;
             }
         }
     }
