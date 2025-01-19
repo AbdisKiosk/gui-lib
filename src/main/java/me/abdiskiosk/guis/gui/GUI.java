@@ -12,6 +12,8 @@ import me.abdiskiosk.guis.item.GUIItem;
 import me.abdiskiosk.guis.placeholder.PlaceholderUtils;
 import me.abdiskiosk.guis.state.NamedState;
 import me.abdiskiosk.guis.state.StaticNamedState;
+import me.abdiskiosk.guis.util.Scheduler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -19,6 +21,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,6 +43,12 @@ public class GUI implements GUIEventHandler {
     private @Nullable Consumer<@NotNull InventoryOpenEvent> openAction;
     @Setter @Getter
     private @Nullable Consumer<@NotNull Event> otherAction;
+
+    @Getter
+    private @Nullable Runnable runWhileOpen;
+    @Getter
+    private int runWhileOpenWaitTicks;
+    private @Nullable BukkitTask lastTaskWhileOpen;
 
     protected final @NotNull Set<NamedState<?>> placeholders = new HashSet<>();
     protected final @NotNull Map<GUIItem, Set<StaticNamedState<?>>> itemToPlaceholders = new HashMap<>();
@@ -115,6 +124,17 @@ public class GUI implements GUIEventHandler {
         return view.isOpen();
     }
 
+    public synchronized void whileOpenAsync(@NotNull Runnable run, int waitTicks) {
+        this.runWhileOpen = run;
+        this.runWhileOpenWaitTicks = waitTicks;
+
+        if(isRunningWhileOpenTask() && lastTaskWhileOpen != null) {
+            lastTaskWhileOpen.cancel();
+            startRunningWhileOpenTask();
+        }
+
+    }
+
     @Override
     public void handleDrag(@NotNull InventoryDragEvent event) {
         handleIfPresent(dragAction, event);
@@ -128,11 +148,37 @@ public class GUI implements GUIEventHandler {
     @Override
     public void handleOpen(@NotNull InventoryOpenEvent event) {
         handleIfPresent(openAction, event);
+        startRunningWhileOpenIfNotRunning();
     }
 
     @Override
     public void handleClose(@NotNull InventoryCloseEvent event) {
         handleIfPresent(closeAction, event);
+    }
+
+    private synchronized void startRunningWhileOpenIfNotRunning() {
+        if(!isRunningWhileOpenTask()) {
+            startRunningWhileOpenTask();
+        }
+    }
+
+    private synchronized void startRunningWhileOpenTask() throws IllegalStateException {
+        if(isRunningWhileOpenTask()) {
+            throw new IllegalStateException("Already running while open task");
+        }
+        if(runWhileOpen == null) {
+            return;
+        }
+        lastTaskWhileOpen = Scheduler.untilClosedAsync(this, runWhileOpen, runWhileOpenWaitTicks);
+    }
+
+    private synchronized boolean isRunningWhileOpenTask() {
+        if(lastTaskWhileOpen == null) {
+            return false;
+        }
+
+        return Bukkit.getScheduler().isCurrentlyRunning(lastTaskWhileOpen.getTaskId())
+                || Bukkit.getScheduler().isQueued(lastTaskWhileOpen.getTaskId());
     }
 
     private <T> void handleIfPresent(Consumer<@NotNull T> action, @NotNull T event) {

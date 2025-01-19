@@ -1,9 +1,11 @@
 package me.abdiskiosk.guis.util;
 
+import lombok.Getter;
 import me.abdiskiosk.guis.GUIManager;
 import me.abdiskiosk.guis.gui.GUI;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +18,7 @@ public class Scheduler {
     }
 
     /**
-     * @deprecated Use {@link #untilClosed(GUI, Runnable, int)} instead. This method does not work when the GUI is closed.
+     * @deprecated Use {@link GUI#whileOpenAsync(Runnable, int)} instead. This method does not work when the GUI is closed.
      */
     @Deprecated
     public static void whileOpen(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
@@ -24,19 +26,20 @@ public class Scheduler {
     }
 
     /**
-     * @deprecated Use {@link #untilClosedAsync(GUI, Runnable, int)} instead. This method does not work when the GUI is closed.
+     * @deprecated Use {@link GUI#whileOpenAsync(Runnable, int)} instead. This method does not work when the GUI is closed.
      */
     @Deprecated
     public static void whileOpenAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
         untilClosedAsync(gui, runnable, waitTicks);
     }
 
-    public static void untilClosed(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
-        new Task(gui, waitTicks, false, true, runnable).runTask(GUIManager.getPlugin());
+    public static @NotNull BukkitTask untilClosed(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
+        return new WhileOpenTask(gui, runnable).runTaskTimer(GUIManager.getPlugin(), 0, waitTicks);
     }
 
-    public static void untilClosedAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
-        new Task(gui, waitTicks, true, true, runnable).runTaskAsynchronously(GUIManager.getPlugin());
+    public static @NotNull BukkitTask untilClosedAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
+        return new WhileOpenTask(gui, runnable).runTaskTimerAsynchronously(GUIManager.getPlugin(), 0, waitTicks);
+
     }
 
     public static void async(@NotNull Runnable runnable) {
@@ -59,6 +62,33 @@ public class Scheduler {
         Bukkit.getScheduler().runTask(GUIManager.getPlugin(), runnable);
     }
 
+    public static class WhileOpenTask extends BukkitRunnable {
+
+        private final GUI gui;
+        private final Runnable run;
+
+        private boolean firstRun = true;
+
+        public WhileOpenTask(@NotNull GUI gui, @NotNull Runnable run) {
+            this.gui = gui;
+            this.run = run;
+        }
+
+        @Override
+        public void run() {
+            if(firstRun) {
+                run.run();
+                firstRun = false;
+            }
+
+            if(!gui.isOpen()) {
+                cancel();
+            }
+            run.run();
+        }
+
+    }
+
     public static class Task extends BukkitRunnable {
 
         private final Runnable run;
@@ -66,6 +96,8 @@ public class Scheduler {
         private final GUI gui;
         private final boolean async;
         private final boolean firstRun;
+        @Getter
+        private boolean cancelled;
 
         public Task(@NotNull GUI gui, int waitTicks, boolean async, boolean firstRun, @NotNull Runnable run) {
             this.gui = gui;
