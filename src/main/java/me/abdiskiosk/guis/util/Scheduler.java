@@ -15,11 +15,27 @@ public class Scheduler {
         Bukkit.getScheduler().runTaskLater(GUIManager.getPlugin(), runnable, 1L);
     }
 
+    /**
+     * @deprecated Use {@link #untilClosed(GUI, Runnable, int)} instead. This method does not work when the GUI is closed.
+     */
+    @Deprecated
     public static void whileOpen(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
+        untilClosed(gui, runnable, waitTicks);
+    }
+
+    /**
+     * @deprecated Use {@link #untilClosedAsync(GUI, Runnable, int)} instead. This method does not work when the GUI is closed.
+     */
+    @Deprecated
+    public static void whileOpenAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
+        untilClosedAsync(gui, runnable, waitTicks);
+    }
+
+    public static void untilClosed(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
         new Task(gui, waitTicks, false, true, runnable).runTask(GUIManager.getPlugin());
     }
 
-    public static void whileOpenAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
+    public static void untilClosedAsync(@NotNull GUI gui, @NotNull Runnable runnable, int waitTicks) {
         new Task(gui, waitTicks, true, true, runnable).runTaskAsynchronously(GUIManager.getPlugin());
     }
 
