@@ -1,5 +1,6 @@
 package me.abdiskiosk.guis.state.objects;
 
+import lombok.Getter;
 import me.abdiskiosk.guis.pagination.PaginationHandler;
 import me.abdiskiosk.guis.state.State;
 import me.abdiskiosk.guis.util.Scheduler;
@@ -10,14 +11,18 @@ import java.util.function.Consumer;
 
 public class PageState implements State<Integer> {
 
+    @Getter
+    private final BooleanState loadingState;
     private final IntState state;
     private final PaginationHandler<?> paginationHandler;
 
     public PageState(PaginationHandler<?> paginationHandler) {
         this.state = new IntState(1);
+        this.loadingState = new BooleanState(false);
         this.paginationHandler = paginationHandler;
         set(1);
     }
+
 
     @Override
     public Integer get() {
@@ -25,7 +30,11 @@ public class PageState implements State<Integer> {
     }
 
     @Override
-    public void set(Integer value) {
+    public synchronized void set(Integer value) {
+        if(loadingState.get()) {
+            return;
+        }
+        loadingState.set(true);
         if(value < 0) {
             return;
         }
@@ -33,6 +42,7 @@ public class PageState implements State<Integer> {
             if(!result.equals(PaginationHandler.PageResult.EMPTY)) {
                 state.set(value);
             }
+            loadingState.set(false);
         });
     }
 
