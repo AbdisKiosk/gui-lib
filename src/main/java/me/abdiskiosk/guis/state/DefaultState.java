@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -24,30 +25,51 @@ public class DefaultState<T> implements State<T> {
     }
 
     @Override
-    public synchronized void set(T value) {
-        T oldValue = this.value;
-        for(BiConsumer<T, T> subscriber : biSubscribers) {
+    public void set(T value) {
+        T oldValue;
+        List<BiConsumer<T, T>> biSubsCopy;
+        List<Consumer<T>> subsCopy;
+        synchronized (this) {
+            oldValue = this.value;
+            this.value = value;
+            biSubsCopy = new ArrayList<>(biSubscribers);
+            subsCopy = new ArrayList<>(subscribers);
+        }
+        for (BiConsumer<T, T> subscriber : biSubsCopy) {
             subscriber.accept(oldValue, value);
         }
-        this.value = value;
-        update();
+        subsCopy.forEach(subscriber -> subscriber.accept(value));
     }
 
     @Override
-    public synchronized void update() {
-        subscribers.forEach(subscriber -> subscriber.accept(value));
+    public void update() {
+        T currentValue;
+        List<Consumer<T>> subsCopy;
+        synchronized (this) {
+            currentValue = this.value;
+            subsCopy = new ArrayList<>(subscribers);
+        }
+        subsCopy.forEach(subscriber -> subscriber.accept(currentValue));
     }
 
     @Override
-    public synchronized void subscribe(@NotNull Consumer<T> subscriber) {
-        subscribers.add(subscriber);
-        subscriber.accept(value);
+    public void subscribe(@NotNull Consumer<T> subscriber) {
+        T currentValue;
+        synchronized (this) {
+            subscribers.add(subscriber);
+            currentValue = this.value;
+        }
+        subscriber.accept(currentValue);
     }
 
     @Override
     public void subscribe(@NotNull BiConsumer<T, T> subscriber) {
-        biSubscribers.add(subscriber);
-        subscriber.accept(value, value);
+        T currentValue;
+        synchronized (this) {
+            biSubscribers.add(subscriber);
+            currentValue = this.value;
+        }
+        subscriber.accept(currentValue, currentValue);
     }
 
     @Override
